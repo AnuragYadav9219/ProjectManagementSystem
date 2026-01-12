@@ -1,0 +1,17 @@
+# ===== Backend =====
+backend/target/
+backend/application.properties
+backend/application.yml
+backend/.idea/
+backend/*.log
+
+# ===== Frontend =====
+frontend/node_modules/
+frontend/dist/
+frontend/.env
+
+# ===== IDE / OS =====
+.vscode/
+.idea/
+.DS_Store
+*.iml
