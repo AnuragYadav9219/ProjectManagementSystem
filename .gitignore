@@ -1,7 +1,9 @@
 # ===== Backend =====
 backend/target/
-backend/application.properties
-backend/application.yml
+backend/src/main/resources/application.properties
+backend/src/main/resources/application.yml
+backend/src/main/resources/application-*.properties
+backend/src/main/resources/application-*.yml
 backend/.idea/
 backend/*.log
 
@@ -9,6 +11,7 @@ backend/*.log
 frontend/node_modules/
 frontend/dist/
 frontend/.env
+frontend/.env.local
 
 # ===== IDE / OS =====
 .vscode/
