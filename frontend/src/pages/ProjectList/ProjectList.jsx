@@ -11,7 +11,7 @@ import {
 import React, { useState } from "react";
 import ProjectCard from "../Project/ProjectCard";
 
-const tags = [
+export const tags = [
   "all",
   "react",
   "nextjs",
@@ -123,8 +123,10 @@ const ProjectList = () => {
           <div>
             <div className="space-y-5 min-h-[74vh]">
               {keyword
-                ? [1, 1, 1].map((item) => <ProjectCard key={item} />)
-                : [1, 1, 1, 1, 1].map((item) => <ProjectCard key={item} />)}
+                ? [1, 2, 3].map((item, index) => <ProjectCard key={index} />)
+                : [1, 2, 3, 4, 5].map((item, index) => (
+                    <ProjectCard key={index} />
+                  ))}
             </div>
           </div>
         </section>

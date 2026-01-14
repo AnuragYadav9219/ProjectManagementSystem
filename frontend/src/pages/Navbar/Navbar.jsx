@@ -1,6 +1,21 @@
 import { Button } from "@/components/ui/button";
-import { Dialog, DialogHeader, DialogTrigger } from "@/components/ui/dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 import React from "react";
+import CreateProjectForm from "../Project/CreateProjectForm";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { PersonIcon } from "@radix-ui/react-icons";
 
 const Navbar = () => {
   return (
@@ -8,14 +23,42 @@ const Navbar = () => {
       <div className="flex items-center gap-3">
         <p className="cursor-pointer">Project Management</p>
         <Dialog>
-            <DialogTrigger>
-                <Button variant="ghost">New Project</Button>
-            </DialogTrigger>
+          <DialogTrigger asChild>
+            <Button className="cursor-pointer" variant="ghost">New Project</Button>
+          </DialogTrigger>
 
-            <DialogContent>
-                <DialogHeader>Create New Project</DialogHeader>
-            </DialogContent>
+          <DialogContent>
+            <DialogHeader>
+              <DialogTitle>Create New Project</DialogTitle>
+              <DialogDescription>
+                Fill in the details below to create a new project.
+              </DialogDescription>
+            </DialogHeader>
+
+            <CreateProjectForm />
+          </DialogContent>
         </Dialog>
+
+        <Button className="cursor-pointer" variant="ghost">Upgrade</Button>
+      </div>
+
+      <div className="flex gap-3 items-center">
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button
+              variant="outline"
+              size="icon"
+              className="rounded-full border-2 border-gray-500"
+            >
+              <PersonIcon />
+            </Button>
+          </DropdownMenuTrigger>
+
+          <DropdownMenuContent>
+            <DropdownMenuItem>Logout</DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
+        <p>Code with Anurag</p>
       </div>
     </div>
   );
