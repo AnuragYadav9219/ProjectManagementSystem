@@ -10,22 +10,23 @@ import { Input } from "@/components/ui/input";
 import React from "react";
 import { useForm } from "react-hook-form";
 
-const Login = () => {
+const SignUp = () => {
   const form = useForm({
     defaultValues: {
+      fullName: "",
       email: "",
       password: "",
     },
   });
 
   const onSubmit = (data) => {
-    console.log("Login data:", data);
+    console.log("Register data:", data);
   };
 
   return (
     <div className="space-y-6">
       <h1 className="text-2xl font-semibold text-center">
-        Welcome back
+        Create an account
       </h1>
 
       <Form {...form}>
@@ -33,6 +34,23 @@ const Login = () => {
           onSubmit={form.handleSubmit(onSubmit)}
           className="space-y-4"
         >
+          <FormField
+            control={form.control}
+            name="fullName"
+            rules={{ required: "Full name is required" }}
+            render={({ field }) => (
+              <FormItem>
+                <FormControl>
+                  <Input
+                    {...field}
+                    placeholder="Full name"
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
           <FormField
             control={form.control}
             name="email"
@@ -76,7 +94,7 @@ const Login = () => {
           />
 
           <Button type="submit" className="w-full">
-            Sign in
+            Create account
           </Button>
         </form>
       </Form>
@@ -84,4 +102,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default SignUp;
