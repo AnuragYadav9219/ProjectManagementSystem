@@ -7,10 +7,14 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { register } from "@/Redux/Auth/Action";
 import React from "react";
 import { useForm } from "react-hook-form";
+import { useDispatch } from "react-redux";
 
 const SignUp = () => {
+  const dispatch = useDispatch();
+
   const form = useForm({
     defaultValues: {
       fullName: "",
@@ -20,6 +24,7 @@ const SignUp = () => {
   });
 
   const onSubmit = (data) => {
+    dispatch(register(data))
     console.log("Register data:", data);
   };
 

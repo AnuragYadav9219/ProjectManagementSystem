@@ -17,9 +17,17 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { PersonIcon } from "@radix-ui/react-icons";
 import { useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { logout } from "@/Redux/Auth/Action";
 
 const Navbar = () => {
+  const auth = useSelector((store) => store.auth);
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  const handleLogout = () => {
+    dispatch(logout());
+  };
 
   return (
     <div className="border-b py-4 px-5 flex items-center justify-between">
@@ -64,10 +72,10 @@ const Navbar = () => {
           </DropdownMenuTrigger>
 
           <DropdownMenuContent>
-            <DropdownMenuItem>Logout</DropdownMenuItem>
+            <DropdownMenuItem onClick={handleLogout}>Logout</DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
-        <p>Code with Anurag</p>
+        <p>{auth.user?.fullName}</p>
       </div>
     </div>
   );

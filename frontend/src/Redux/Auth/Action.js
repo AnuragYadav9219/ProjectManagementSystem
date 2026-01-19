@@ -31,19 +31,18 @@ export const login = userData => async (dispatch) => {
 }
 
 export const getUser = () => async (dispatch) => {
+    const jwt = localStorage.getItem("jwt");
+    if (!jwt) return;
+
     dispatch({ type: GET_USER_REQUEST })
     try {
-        const { data } = await axios.get(`${API_BASE_URL}/api/users/profile`, {
+        const { data } = await axios.get(`${API_BASE_URL}/users/profile`, {
             headers: {
-                "Authorization": `Bearer ${localStorage.getItem("jwt")}`
+                "Authorization": `Bearer ${jwt}`
             }
         })
 
-        if (data.jwt) {
-            localStorage.setItem("jwt", data.jwt)
-            dispatch({ type: GET_USER_SUCCESS, payload: data })
-        }
-        console.log("Login Success", data)
+        dispatch({ type: GET_USER_SUCCESS, payload: data })
     } catch (error) {
         console.log(error)
     }

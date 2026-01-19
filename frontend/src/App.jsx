@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Home from "./pages/Home/Home";
 import Login from "./pages/auth/Login";
 import Navbar from "./pages/Navbar/Navbar";
@@ -8,11 +8,24 @@ import IssueDetails from "./pages/IssueDetails/IssueDetails";
 import Subscription from "./pages/Subscription/Subscription";
 import SignUp from "./pages/auth/SignUp";
 import Auth from "./pages/auth/Auth";
+import { useDispatch, useSelector } from "react-redux";
+import { getUser } from "./Redux/Auth/Action";
+import { fetchProjects } from "./Redux/Project/Action";
 
 const App = () => {
+  const dispatch = useDispatch();
+  const auth = useSelector((store) => store.auth);
+
+  useEffect(() => {
+    dispatch(getUser());
+    dispatch(fetchProjects({}));
+  }, [auth.jwt]);
+
+  console.log(auth);
+
   return (
     <>
-      {false ? (
+      {auth.user ? (
         <div>
           <Navbar />
           <Routes>

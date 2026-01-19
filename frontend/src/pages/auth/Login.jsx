@@ -7,10 +7,14 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { login } from "@/Redux/Auth/Action";
 import React from "react";
 import { useForm } from "react-hook-form";
+import { useDispatch } from "react-redux";
 
 const Login = () => {
+  const dispatch = useDispatch();
+
   const form = useForm({
     defaultValues: {
       email: "",
@@ -19,6 +23,7 @@ const Login = () => {
   });
 
   const onSubmit = (data) => {
+    dispatch(login(data)); 
     console.log("Login data:", data);
   };
 
@@ -76,7 +81,7 @@ const Login = () => {
           />
 
           <Button type="submit" className="w-full">
-            Sign in
+            Login
           </Button>
         </form>
       </Form>
