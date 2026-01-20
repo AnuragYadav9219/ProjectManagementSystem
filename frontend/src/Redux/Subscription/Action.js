@@ -1,14 +1,14 @@
 import api from "@/config/api";
 import { GET_USER_SUBSCRIPTION_FAILURE, GET_USER_SUBSCRIPTION_REQUEST, GET_USER_SUBSCRIPTION_SUCCESS, UPGRADE_SUBSCRIPTION_FAILURE, UPGRADE_SUBSCRIPTION_REQUEST, UPGRADE_SUBSCRIPTION_SUCCESS } from "./ActionType"
 
-export const getUserSubscription = (jwt) => {
+export const getUserSubscription = () => {
     return async (dispatch) => {
-        dispatch({type: GET_USER_SUBSCRIPTION_REQUEST});
+        dispatch({ type: GET_USER_SUBSCRIPTION_REQUEST });
         try {
-            const response = await api.get("/api/subscriptions/user", {
+            const response = await api.get("/subscription/user", {
                 headers: {
-                    "Authorization" : `Bearer ${jwt}`
-                }
+                    "Authorization": `Bearer ${localStorage.getItem("jwt")}`
+                },
             });
             dispatch({
                 type: GET_USER_SUBSCRIPTION_SUCCESS,
@@ -25,13 +25,16 @@ export const getUserSubscription = (jwt) => {
     };
 }
 
-export const upgradeSubscription = ({planType}) => {
+export const upgradeSubscription = ({ planType }) => {
     return async (dispatch) => {
-        dispatch({type: UPGRADE_SUBSCRIPTION_REQUEST});
+        dispatch({ type: UPGRADE_SUBSCRIPTION_REQUEST });
         try {
-            const response = await api.patch("/api/subscriptions/upgrade", null, {
+            const response = await api.patch("/subscription/upgrade", null, {
+                headers: {
+                    "Authorization": `Bearer ${localStorage.getItem("jwt")}`
+                },
                 params: {
-                    planType : planType
+                    planType: planType
                 }
             });
             dispatch({

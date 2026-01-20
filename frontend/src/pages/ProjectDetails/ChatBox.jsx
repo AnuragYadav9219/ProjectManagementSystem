@@ -1,99 +1,44 @@
-// import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-// import { Button } from "@/components/ui/button";
-// import { Input } from "@/components/ui/input";
-// import { ScrollArea } from "@/components/ui/scroll-area";
-// import { PaperPlaneIcon } from "@radix-ui/react-icons";
-// import React, { useState } from "react";
-
-// const ChatBox = () => {
-//   const [message, setMessage] = useState("")
-//   const handleSendMessage = () => {
-//     console.log("Message : ", message)
-//   }
-
-//   const handleMessageChange = (e) => {
-//     setMessage(e.target.value);
-//   }
-
-//   return (
-//     <div className="sticky">
-//       <div className="border rounded-lg">
-//         <h1 className="border-b p-5">Chat Box</h1>
-//         <ScrollArea className="h-128 w-full p-5 flex gap-3 flex-col">
-//           {[1, 1, 1, 1].map((_, index) =>
-//             index % 2 == 0 ? (
-//               <div className="flex gap-2 justify-start mb-2" key={index}>
-//                 <Avatar>
-//                   <AvatarFallback>R</AvatarFallback>
-//                 </Avatar>
-//                 <div className="space-y-2 py-2 px-5 border rounded-e-xl rounded-ss-2xl">
-//                   <p>Raam</p>
-//                   <p className="text-gray-300">How are you?</p>
-//                 </div>
-//               </div>
-//             ) : (
-//               <div className="flex justify-end gap-2 mb-2" key={index}>
-//                 <div className="space-y-2 py-2 px-5 border rounded-s-xl rounded-se-2xl">
-//                   <p>Raam</p>
-//                   <p className="text-gray-300">How are you?</p>
-//                 </div>
-//                 <Avatar>
-//                   <AvatarFallback>R</AvatarFallback>
-//                 </Avatar>
-//               </div>
-//             ),
-//           )}
-//         </ScrollArea>
-
-//         <div className="relative p-0">
-//           <Input
-//             className="py-7 border-t outline-none focus:outline-none focus:ring-0 rounded-none border-b-0 border-x-0"
-//             placeholder="Type your message..."
-//             value={message}
-//             onChange={handleMessageChange}
-//           >
-//             <Button
-//               onClick={handleSendMessage}
-//               className="absolute right-2 top-3 rounded-full"
-//               size="icon"
-//               variant="ghost"
-//             >
-//               <PaperPlaneIcon />
-//             </Button>
-//           </Input>
-//         </div>
-//       </div>
-//     </div>
-//   );
-// };
-
-// export default ChatBox;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import {
+  fetchChatByProject,
+  fetchChatMessages,
+  sendMessage,
+} from "@/Redux/Chat/Action";
 import { PaperPlaneIcon } from "@radix-ui/react-icons";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { useParams } from "react-router-dom";
 
 const ChatBox = () => {
   const [message, setMessage] = useState("");
+  const auth = useSelector((store) => store.auth);
+  const chat = useSelector((store) => store.chat);
+  const { id } = useParams();
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    if (id) {
+      dispatch(fetchChatByProject(id));
+    }
+  }, [id, dispatch]);
+
+  useEffect(() => {
+    if (chat.chat?.id) {
+      dispatch(fetchChatMessages(chat.chat.id));
+    }
+  }, [chat.chat?.id, dispatch]);
 
   const handleSendMessage = () => {
+    dispatch(
+      sendMessage({
+        senderId: auth.user?.id,
+        projectId: id,
+        content: message,
+      }),
+    );
     console.log("Message:", message);
     setMessage("");
   };
@@ -109,38 +54,28 @@ const ChatBox = () => {
 
         {/* Messages */}
         <ScrollArea className="h-128 w-full p-5 flex flex-col gap-3">
-          {[1, 1, 1, 1].map((_, index) =>
-            index % 2 === 0 ? (
-              <div
-                key={index}
-                className="flex gap-2 justify-start mb-2"
-              >
+          {chat.messages?.map((item) =>
+            item.sender.id !== auth.user?.id ? (
+              <div key={item.id || item._id} className="flex gap-2 justify-start mb-2">
                 <Avatar>
-                  <AvatarFallback>R</AvatarFallback>
+                  <AvatarFallback>{item.sender.fullName[0]}</AvatarFallback>
                 </Avatar>
                 <div className="space-y-1 py-2 px-5 border rounded-e-xl rounded-ss-2xl">
-                  <p className="text-sm">Raam</p>
-                  <p className="text-gray-300 text-sm">
-                    How are you?
-                  </p>
+                  <p className="text-sm">{item.sender.fullName}</p>
+                  <p className="text-gray-300 text-sm">{item.content}</p>
                 </div>
               </div>
             ) : (
-              <div
-                key={index}
-                className="flex justify-end gap-2 mb-2"
-              >
+              <div key={item.id || item._id} className="flex justify-end gap-2 mb-2">
                 <div className="space-y-1 py-2 px-5 border rounded-s-xl rounded-se-2xl">
-                  <p className="text-sm">Raam</p>
-                  <p className="text-gray-300 text-sm">
-                    How are you?
-                  </p>
+                  <p className="text-sm">{item.sender.fullName}</p>
+                  <p className="text-gray-300 text-sm">{item.content}</p>
                 </div>
                 <Avatar>
-                  <AvatarFallback>R</AvatarFallback>
+                  <AvatarFallback>{item.sender.fullName[0]}</AvatarFallback>
                 </Avatar>
               </div>
-            )
+            ),
           )}
         </ScrollArea>
 

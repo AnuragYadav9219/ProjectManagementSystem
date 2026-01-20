@@ -8,10 +8,14 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { createComment } from "@/Redux/Comment/Action";
 import React from "react";
 import { useForm } from "react-hook-form";
+import { useDispatch } from "react-redux";
 
 const CreateCommmentForm = ({ issueId }) => {
+  const dispatch = useDispatch();
+
   const form = useForm({
     defaultValues: {
       content: "",
@@ -19,6 +23,11 @@ const CreateCommmentForm = ({ issueId }) => {
   });
 
   const onSubmit = (data) => {
+    dispatch(createComment({ content: data.content, issueId }));
+    form.reset({
+      content: "",
+    });
+    
     console.log("Invite user data:", data);
   };
 
@@ -49,7 +58,9 @@ const CreateCommmentForm = ({ issueId }) => {
                     />
                   </FormControl>
 
-                  <Button type="submit" className="cursor-pointer">Save</Button>
+                  <Button type="submit" className="cursor-pointer">
+                    Save
+                  </Button>
                 </div>
 
                 <FormMessage />

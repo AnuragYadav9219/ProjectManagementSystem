@@ -56,7 +56,7 @@ export const issueReducer = (state = intialState, action) => {
                 ...state,
                 loading: false,
                 issues: state.issues.filter((issue) =>
-                    issue.id !== action.issueId
+                    issue.id !== action.payload
                 ),
             };
 

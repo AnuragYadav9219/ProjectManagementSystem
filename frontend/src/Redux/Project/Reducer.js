@@ -68,6 +68,7 @@ export const projectReducer = (state = initialState, action) => {
         projects: state.projects.filter(
           (project) => project.id !== action.payload
         ),
+        error: null
       };
 
     default:

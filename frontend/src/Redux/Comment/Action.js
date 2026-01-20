@@ -6,7 +6,7 @@ export const createComment = (commentData) => {
         dispatch({ type: CREATE_COMMENT_REQUEST });
         try {
             const response = await api.post(
-                `/api/comments`,
+                `/comments`,
                 commentData
             );
             console.log("Comment created", response.data)
@@ -29,7 +29,7 @@ export const deleteComment = (commentId) => {
         dispatch({ type: DELETE_COMMENT_REQUEST });
         try {
             const response = await api.delete(
-                `/api/comments/${commentId}`
+                `/comments/${commentId}`
             );
             dispatch({
                 type: DELETE_COMMENT_SUCCESS,
@@ -45,12 +45,12 @@ export const deleteComment = (commentId) => {
     };
 }
 
-export const fetchComment = (issueId) => {
+export const fetchComments = (issueId) => {
     return async (dispatch) => {
         dispatch({ type: FETCH_COMMENTS_REQUEST });
         try {
             const response = await api.get(
-                `/api/comments/${issueId}`
+                `/comments/${issueId}`
             );
             dispatch({
                 type: FETCH_COMMENTS_SUCCESS,

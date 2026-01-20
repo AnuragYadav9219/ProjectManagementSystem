@@ -11,6 +11,7 @@ import Auth from "./pages/auth/Auth";
 import { useDispatch, useSelector } from "react-redux";
 import { getUser } from "./Redux/Auth/Action";
 import { fetchProjects } from "./Redux/Project/Action";
+import UpgradeSuccess from "./pages/Subscription/UpgradeSuccess";
 
 const App = () => {
   const dispatch = useDispatch();
@@ -36,6 +37,7 @@ const App = () => {
               element={<IssueDetails />}
             />
             <Route path="/upgrade_plan" element={<Subscription />} />
+            <Route path="/upgrade_plan/success" element={<UpgradeSuccess />} />
 
             <Route path="/login" element={<Login />} />
             <Route path="/signup" element={<SignUp />} />

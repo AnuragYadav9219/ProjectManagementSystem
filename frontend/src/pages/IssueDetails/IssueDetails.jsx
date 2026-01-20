@@ -1,6 +1,6 @@
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import React from "react";
+import React, { useEffect } from "react";
 import { useParams } from "react-router-dom";
 import CreateCommmentForm from "./CreateCommmentForm";
 import CommentCard from "./CommentCard";
@@ -13,13 +13,25 @@ import {
 } from "@/components/ui/select";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchIssueById, updateIssueStatus } from "@/Redux/Issue/Action";
+import { fetchComments } from "@/Redux/Comment/Action";
 
 const IssueDetails = () => {
   const { projectId, issueId } = useParams();
+  const dispatch = useDispatch();
+  const issue = useSelector((store) => store.issue);
+  const comment = useSelector((store) => store.comment);
 
   const handleUpdateIssueStatus = (status) => {
+    dispatch(updateIssueStatus({ status, id: issueId }));
     console.log(status);
   };
+
+  useEffect(() => {
+    dispatch(fetchIssueById(issueId));
+    dispatch(fetchComments(issueId));
+  }, [issueId]);
 
   return (
     <div className="px-20 py-8 text-gray-400">
@@ -27,12 +39,12 @@ const IssueDetails = () => {
         <ScrollArea className="h-[80vh] w-[60%]">
           <div>
             <h1 className="text-lg font-semibold text-gray-400">
-              Create Navbar
+              {issue.issueDetails?.title}
             </h1>
             <div className="py-5">
               <h2 className="font-semibold text-gray-400">Description</h2>
               <p className="text-gray-400 text-sm mt-3">
-                Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                {issue.issueDetails?.description}
               </p>
             </div>
 
@@ -57,8 +69,8 @@ const IssueDetails = () => {
                 <TabsContent value="comments">
                   <CreateCommmentForm issueId={issueId} />
                   <div className="mt-8 space-y-6">
-                    {[1, 1, 1].map((_, index) => (
-                      <CommentCard key={index} />
+                    {comment.comments.map((item) => (
+                      <CommentCard item={item} key={item.id} />
                     ))}
                   </div>
                 </TabsContent>
@@ -90,12 +102,18 @@ const IssueDetails = () => {
               <div className="space-y-7">
                 <div className="flex gap-10 items-center">
                   <p className="w-28">Assignee</p>
-                  <div className="flex items-center">
-                    <Avatar className="h-8 w-8 text-xs">
-                      <AvatarFallback>A</AvatarFallback>
-                    </Avatar>
-                    <p>Code with Anurag</p>
-                  </div>
+                  {issue.issueDetails?.assignee?.fullName ? (
+                    <div className="flex items-center">
+                      <Avatar className="h-8 w-8 text-xs">
+                        <AvatarFallback>
+                          {issue.issueDetails?.assignee?.fullName[0]}
+                        </AvatarFallback>
+                      </Avatar>
+                      <p>{issue.issueDetails?.assignee?.fullName}</p>
+                    </div>
+                  ) : (
+                    <p>Unassigned</p>
+                  )}
                 </div>
 
                 <div className="flex gap-10 items-center">
@@ -105,7 +123,7 @@ const IssueDetails = () => {
 
                 <div className="flex gap-10 items-center">
                   <p className="w-28">Status</p>
-                  <Badge>in_progress</Badge>
+                  <Badge>{issue.issueDetails?.status}</Badge>
                 </div>
 
                 <div className="flex gap-10 items-center">

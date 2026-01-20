@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { ScrollArea } from "@/components/ui/scroll-area";
@@ -14,9 +14,19 @@ import { PlusIcon } from "@radix-ui/react-icons";
 import InviteUserForm from "./InviteUserForm";
 import IssueList from "./IssueList";
 import ChatBox from "./ChatBox";
+import { useDispatch, useSelector } from "react-redux";
+import { useParams } from "react-router-dom";
+import { fetchProjectById } from "@/Redux/Project/Action";
 
 const ProjectDetails = () => {
+  const dispatch = useDispatch();
+  const { id } = useParams();
+  const project = useSelector((store) => store.project);
   const handleProjectInvitation = () => {};
+
+  useEffect(() => {
+    dispatch(fetchProjectById(id));
+  }, [id]);
 
   return (
     <div className="mt-5 lg:px-10">
@@ -25,28 +35,28 @@ const ProjectDetails = () => {
           <div className="text-gray-400 pb-10 w-full space-y-6">
             {/* Title */}
             <h1 className="text-lg font-semibold text-white">
-              Create Ecommerce Website using React
+              {project.projectDetails?.name}
             </h1>
 
             <div className="space-y-5 pb-10 text-sm">
               {/* Description */}
               <p className="md:max-w-lg lg:max-w-xl">
-                Lorem, ipsum dolor sit amet consectetur adipisicing elit.
+                {project.projectDetails?.description}
               </p>
 
               {/* Project Lead */}
               <div className="flex items-center gap-3">
                 <p className="w-36">Project Lead :</p>
-                <p>Code</p>
+                <p>{project.projectDetails?.owner.fullName}</p>
               </div>
 
               {/* Members */}
               <div className="flex items-center gap-3">
                 <p className="w-36">Members :</p>
                 <div className="flex gap-2">
-                  {[1, 2, 3, 4].map((item) => (
+                  {project.projectDetails?.team.map((item) => (
                     <Avatar key={item} className="cursor-pointer">
-                      <AvatarFallback>C</AvatarFallback>
+                      <AvatarFallback>{item.fullName[0]}</AvatarFallback>
                     </Avatar>
                   ))}
                 </div>
@@ -75,21 +85,21 @@ const ProjectDetails = () => {
               {/* Category */}
               <div className="flex items-center gap-3">
                 <p className="w-36">Category :</p>
-                <p>Full Stack</p>
+                <p>{project.projectDetails?.category}</p>
               </div>
 
               <div className="flex items-center gap-3">
                 <p className="w-36">Project Lead :</p>
-                <Badge>Code</Badge>
+                <Badge>{project.projectDetails?.owner.fullName}</Badge>
               </div>
             </div>
 
             <section>
               <p className="py-5 border-b text-lg -tracking-wider">Tasks</p>
               <div className="lg:flex md:flex gap-3 justify-between py-5">
-                  <IssueList status="pending" title="Todo List" />
-                  <IssueList status="in_progress" title="In Progress" />
-                  <IssueList status="done" title="Done" />
+                <IssueList status="pending" title="Todo List" />
+                <IssueList status="in_progress" title="In Progress" />
+                <IssueList status="done" title="Done" />
               </div>
             </section>
           </div>

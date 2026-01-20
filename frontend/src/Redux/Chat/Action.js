@@ -6,7 +6,7 @@ export const sendMessage = (messageData) => {
         dispatch({ type: SEND_MESSAGES_REQUEST })
         try {
             const response = await api.post(
-                "/api/messages/send",
+                "/messages/send",
                 messageData
             );
 
@@ -14,6 +14,7 @@ export const sendMessage = (messageData) => {
                 type: SEND_MESSAGES_SUCCESS,
                 message: response.data
             })
+            console.log("Message Sent", response)
 
         } catch (error) {
             console.log(error)
@@ -30,7 +31,7 @@ export const fetchChatByProject = (projectId) => {
         dispatch({ type: FETCH_CHAT_BY_PROJECT_REQUEST })
         try {
             const response = await api.get(
-                `/api/projects/${projectId}/chat`
+                `/projects/${projectId}/chat`
             );
             console.log("Fetch Chat", response.data)
             dispatch({
@@ -53,7 +54,7 @@ export const fetchChatMessages = (chatId) => {
         dispatch({ type: FETCH_CHAT_MESSAGES_REQUEST })
         try {
             const response = await api.get(
-                `/api/messages/chat/${chatId}`
+                `/messages/chat/${chatId}`
             );
             console.log("Fetch Messages ", response.data)
             dispatch({

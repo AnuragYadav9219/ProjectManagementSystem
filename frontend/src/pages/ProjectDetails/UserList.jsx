@@ -1,26 +1,39 @@
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { assignedUserToIssue } from "@/Redux/Issue/Action";
 import React from "react";
+import { useDispatch, useSelector } from "react-redux";
 
-const UserList = () => {
+const UserList = ({ issueDetails }) => {
+  const project = useSelector((store) => store.project);
+  const dispatch = useDispatch();
+
+  const handleAssignIssueToUser = (userId) => {
+    dispatch(assignedUserToIssue({ issueId: issueDetails.id, userId }));
+  };
+
   return (
     <>
       <div className="space-y-2">
         <div className="border rounded-md">
-          <p className="py-2 px-3">{"Raam" || "UnAssignee"}</p>
+          <p className="py-2 px-3">{issueDetails.assignee?.fullName || "Unassignee"}</p>
         </div>
 
-        {[1, 1, 1, 1].map((_, index) => (
+        {project.projectDetails?.team.map((item, index) => (
           <div
+            item={item}
             key={index}
+            onClick={() => handleAssignIssueToUser(item.id)}
             className="py-2 group hover:bg-slate-800 cursor-pointer flex items-center space-x-4 rounded-md borde px-4"
           >
             <Avatar>
-              <AvatarFallback>Z</AvatarFallback>
+              <AvatarFallback>{item.fullName[0]}</AvatarFallback>
             </Avatar>
 
             <div className="space-y-1">
-              <p className="text-sm leading-none">@Code with Anurag</p>
-              <p className="text-sm text-muted-foreground">@CodewithAnurag</p>
+              <p className="text-sm leading-none">{item.fullName}</p>
+              <p className="text-sm text-muted-foreground">
+                @{item.fullName.toLowerCase()}
+              </p>
             </div>
           </div>
         ))}

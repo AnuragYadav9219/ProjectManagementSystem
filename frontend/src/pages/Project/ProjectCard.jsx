@@ -9,7 +9,6 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { deleteProject } from "@/Redux/Project/Action";
 import { DotFilledIcon, DotsVerticalIcon } from "@radix-ui/react-icons";
-import React from "react";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
@@ -18,7 +17,7 @@ const ProjectCard = ({ project }) => {
   const dispatch = useDispatch();
 
   const handleDelete = () => {
-    dispatch(deleteProject({ projectId: project.id }));
+    dispatch(deleteProject(project.id));
   };
 
   return (
@@ -28,7 +27,7 @@ const ProjectCard = ({ project }) => {
           <div className="flex justify-between">
             <div className="flex items-center gap-5">
               <h1
-                onClick={() => navigate("/project/3")}
+                onClick={() => navigate("/project/" + project.id)}
                 className="cursor-pointer font-bold text-lg"
               >
                 {project.name}

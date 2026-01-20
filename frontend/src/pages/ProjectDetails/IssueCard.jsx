@@ -11,15 +11,28 @@ import { DotsVerticalIcon, PersonIcon } from "@radix-ui/react-icons";
 import React from "react";
 import UserList from "./UserList";
 import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { deleteIssue } from "@/Redux/Issue/Action";
 
-const IssueCard = () => {
+const IssueCard = ({ item, projectId }) => {
+  const dispatch = useDispatch();
   const navigate = useNavigate();
+
+  const handleIssueDelete = () => {
+    dispatch(deleteIssue(item.id));
+    console.log("Issue deleted successfully");
+  };
 
   return (
     <Card className="rounded-md py-1 pb-2">
       <CardHeader className="py-0 pb-1">
         <div className="flex justify-between items-center">
-          <CardTitle className="cursor-pointer" onClick={() => navigate("/project/3/issue/10")}>Create Navbar</CardTitle>
+          <CardTitle
+            className="cursor-pointer"
+            onClick={() => navigate(`/project/${projectId}/issue/${item.id}`)}
+          >
+            {item.title}
+          </CardTitle>
 
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
@@ -33,10 +46,12 @@ const IssueCard = () => {
             </DropdownMenuTrigger>
 
             <DropdownMenuContent>
-              <DropdownMenuItem>In Progress</DropdownMenuItem>
-              <DropdownMenuItem>Done</DropdownMenuItem>
-              <DropdownMenuItem>Edit</DropdownMenuItem>
-              <DropdownMenuItem>Delete</DropdownMenuItem>
+              <DropdownMenuItem className="cursor-pointer">In Progress</DropdownMenuItem>
+              <DropdownMenuItem className="cursor-pointer">Done</DropdownMenuItem>
+              <DropdownMenuItem className="cursor-pointer">Edit</DropdownMenuItem>
+              <DropdownMenuItem onClick={handleIssueDelete} className="cursor-pointer">
+                Delete
+              </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
         </div>
@@ -60,7 +75,7 @@ const IssueCard = () => {
             </DropdownMenuTrigger>
 
             <DropdownMenuContent>
-              <UserList />
+              <UserList issueDetails={item} />
             </DropdownMenuContent>
           </DropdownMenu>
         </div>
